@@ -13,7 +13,7 @@ interface Props {
 
 export const Button = ({ text, customClass, solid, outlineDotted, iconRight, iconRightClass, textClass, onClick }: Props) => (
     <button onClick={onClick} className={
-        classNames('group outline h-12 flex items-center hover:opacity-50 active:opacity-70 focus:outline-none focus:ring focus:ring-violet-300 px-5 py-2 leading-5 rounded-full text-spotify-green',
+        classNames('group outline h-12 flex items-center hover:opacity-60 active:opacity-80 focus:outline-none focus:ring focus:ring-violet-300 px-5 py-2 leading-5 rounded-full text-spotify-green',
             {
                 'bg-spotify-black outline-none': solid,
                 'outline-dotted': outlineDotted,
