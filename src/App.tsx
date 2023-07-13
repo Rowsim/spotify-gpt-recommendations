@@ -1,17 +1,19 @@
-import { Recommendations } from './components/Recommendations';
-import { SpotifyConnect } from './components/SpotifyConnect';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+
+const HomePage = lazy(() => import("./pages/home"));
+const CallbackPage = lazy(() => import("./pages/callback"));
 
 function App() {
-  const isSignedIn = false;
-
   return (
-    <div className="App bg-indigo-50 font-montserrat h-full w-full">
-      <div className='flex justify-center items-center h-full w-full'>
-        {
-          isSignedIn ? <Recommendations /> : <SpotifyConnect />
-        }
-      </div>
-    </div>
+    <Router>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/callback" element={<CallbackPage />} />
+        </Routes>
+      </Suspense>
+    </Router>
   );
 }
 

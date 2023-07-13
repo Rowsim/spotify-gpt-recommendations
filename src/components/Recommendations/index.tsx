@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getRecommendations } from "../../services/recommendations";
 import { Button } from "../Button"
 
-export const Recommendations = () => {
+const Recommendations = () => {
     const [isLoading, setIsLoading] = useState(false);
     const recommendations = false;
 
@@ -40,3 +40,5 @@ export const Recommendations = () => {
         </div>
     )
 }
+
+export default Recommendations;
