@@ -6,7 +6,6 @@ import queryString from "query-string";
 
 const CallbackPage = () => {
   const [successfulSignIn, setSuccessfulSignIn] = useState(false);
-  console.debug('CallbackPage render')
   useEffect(() => {
     const queryParams = queryString.parse(location.search);
 

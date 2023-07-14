@@ -33,22 +33,22 @@ const Recommendations = () => {
                 ) :
                     recommendations ? <section>
                         <div className="flex justify-center items-center mb-2">
-                            <Button text='Month' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.SHORT)} outlineDotted customClass={classNames('mr-4 h-8 px-4', 
-                            {
-                                'outline-violet-300': selectedTimeRange === UserTopTimeRange.SHORT
-                            })} textClass="group-hover:animate-pulse group-focus:animate-pulse text-zinc-700" disabled={selectedTimeRange === UserTopTimeRange.SHORT} />
-                            <Button text='Year' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.MEDIUM)} outlineDotted customClass={classNames('mr-4 h-8 px-4', 
-                            {
-                                'outline-violet-300': selectedTimeRange === UserTopTimeRange.MEDIUM
-                            })} textClass="group-hover:animate-pulse group-focus:animate-pulse text-zinc-700" disabled={selectedTimeRange === UserTopTimeRange.MEDIUM} />
-                            <Button text='All Time' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.LONG)} outlineDotted customClass={classNames('mr-4 h-8 px-4', 
-                            {
-                                'outline-violet-400': selectedTimeRange === UserTopTimeRange.LONG
-                            })} textClass="group-hover:animate-pulse group-focus:animate-pulse text-zinc-700" disabled={selectedTimeRange === UserTopTimeRange.LONG} />
+                            <Button text='Month' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.SHORT)} outlineDotted customClass={classNames('mr-4 h-8 px-4',
+                                {
+                                    'outline-violet-300': selectedTimeRange === UserTopTimeRange.SHORT
+                                })} textClass="group-hover:animate-pulse group-focus:animate-pulse text-zinc-700" disabled={selectedTimeRange === UserTopTimeRange.SHORT} />
+                            <Button text='Year' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.MEDIUM)} outlineDotted customClass={classNames('mr-4 h-8 px-4',
+                                {
+                                    'outline-violet-300': selectedTimeRange === UserTopTimeRange.MEDIUM
+                                })} textClass="group-hover:animate-pulse group-focus:animate-pulse text-zinc-700" disabled={selectedTimeRange === UserTopTimeRange.MEDIUM} />
+                            <Button text='All Time' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.LONG)} outlineDotted customClass={classNames('mr-4 h-8 px-4',
+                                {
+                                    'outline-violet-400': selectedTimeRange === UserTopTimeRange.LONG
+                                })} textClass="group-hover:animate-pulse group-focus:animate-pulse text-zinc-700" disabled={selectedTimeRange === UserTopTimeRange.LONG} />
                         </div>
 
                         <h2 className="mb-2 text-xl font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{recommendations.length}</span> recommendations for you</h2>
-                        </section> :
+                    </section> :
                         <section className="flex-row justify-center items-center">
                             <h1 className="mb-2 text-2xl font-extrabold leading-none tracking-tight md:text-3xl lg:text-4xl">Generate <mark className="px-2 text-white bg-spotify-green rounded">recommendations</mark></h1>
                             <p className="mb-6 font-bold text-xs md:text-sm lg:text-base text-center">based on your Spotify usage from the last:</p>
