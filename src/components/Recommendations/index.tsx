@@ -1,20 +1,21 @@
 import { useState } from "react";
 import { getRecommendations } from "../../services/recommendations";
 import { Button } from "../Button"
-import { UserTopTimeRange } from "../../types/spotify";
+import { Track, UserTopTimeRange } from "../../types/spotify";
 import classNames from "classnames";
+import TrackCard from "../TrackCard";
 
 const Recommendations = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTimeRange, setSelectedTimeRange] = useState<undefined | UserTopTimeRange>();
-    const [recommendations, setRecommendations] = useState<any[]>();
+    const [recommendedTracks, setRecommendedTracks] = useState<Track[]>();
 
     const handleGetRecommendationsClick = async (term: UserTopTimeRange) => {
         if (term === selectedTimeRange) return;
         setSelectedTimeRange(term);
         setIsLoading(true);
         try {
-            setRecommendations(await getRecommendations(term));
+            setRecommendedTracks(await getRecommendations(term));
         } catch { }
         setIsLoading(false);
     }
@@ -31,8 +32,8 @@ const Recommendations = () => {
                         </svg>
                     </div>
                 ) :
-                    recommendations ? <section>
-                        <div className="flex justify-center items-center mb-2">
+                    recommendedTracks ? <section>
+                        <div className="flex justify-center items-center mb-6">
                             <Button text='Month' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.SHORT)} outlineDotted customClass={classNames('mr-4 h-8 px-4',
                                 {
                                     'outline-violet-300': selectedTimeRange === UserTopTimeRange.SHORT
@@ -47,7 +48,8 @@ const Recommendations = () => {
                                 })} textClass="group-hover:animate-pulse group-focus:animate-pulse text-zinc-700" disabled={selectedTimeRange === UserTopTimeRange.LONG} />
                         </div>
 
-                        <h2 className="mb-2 text-xl font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{recommendations.length}</span> recommendations for you</h2>
+                        <h2 className="mb-6 text-xl font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{recommendedTracks.length}</span> recommendations for you</h2>
+                        {recommendedTracks.map((track) => <TrackCard key={track.id} track={track} />)}
                     </section> :
                         <section className="flex-row justify-center items-center">
                             <h1 className="mb-2 text-2xl font-extrabold leading-none tracking-tight md:text-3xl lg:text-4xl">Generate <mark className="px-2 text-white bg-spotify-green rounded">recommendations</mark></h1>
