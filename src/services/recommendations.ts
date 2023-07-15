@@ -3,6 +3,8 @@ import { Track } from '../types/spotify';
 import { getArtistNames } from "../utils/spotify-utils";
 import { Configuration, OpenAIApi } from "openai";
 
+// TODO Move most of this logic server side after testing
+
 const SPOTIFY_API_URL = "https://api.spotify.com/v1";
 
 const openaiClient = new OpenAIApi(new Configuration({
@@ -21,6 +23,8 @@ export const getRecommendations = async (term: string) => {
     console.debug('gptResponse', gptResponse);
     const gptSongs = parseGptSongResponse(gptResponse!)
     console.debug('gptSongs', gptSongs)
+    const searchResponse = await spotifySearchTrack(gptSongs[0])
+    console.debug('searchResponse', searchResponse);
 
     // TODO Search spotify for each track
 
@@ -90,6 +94,35 @@ const getUserTopTracks = async (
     return Promise.reject("Invalid spotify auth token :(");
 };
 
+const spotifySearchTrack = async (gptSong: GptSong) => {
+    console.log(`GET ${SPOTIFY_API_URL}/search`);
+    const trackQuerySongAndArtist = `track:${gptSong.song} artist:${gptSong.artist}`
+    const searchResults = await spotifySearch(`${encodeURIComponent(trackQuerySongAndArtist)}&type=track&market=GB&limit=1`);
+    if (searchResults.tracks.items >= 1) return searchResults;
+
+    // Looks like cgpt mixes up tracks with different artists ocassionally..
+    // so we'll do a more generic search if the first one has no results
+    const trackQuery = `track:${gptSong.song}`
+    return await spotifySearch(`${encodeURIComponent(trackQuery)}&type=track&market=GB&limit=1`);
+}
+
+const spotifySearch = async (query: string) => {
+    const spotifyToken = await checkSpotifyTokenAndRefresh();
+    console.log(`GET ${SPOTIFY_API_URL}/search`);
+    if (!spotifyToken) return Promise.reject("Missing spotify auth token");
+    const searchResponse = await fetch(
+        `${SPOTIFY_API_URL}/search?q=${query}`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${spotifyToken}`,
+            },
+        }
+    );
+
+    return await searchResponse.json()
+}
+
 const topTracksToGptQuery = (tracks: Track[], limit = 10) => {
     let trackQuery = 'I like these songs '
 
@@ -124,7 +157,7 @@ const parseGptSongResponse = (response: string): GptSong[] => {
     const songs = JSON.parse(jsonString);
     console.debug('songsJson', songs);
     return songs.map((song: GptSong) => ({
-        song: song.song.split('-')[0],
-        artist: song.artist
+        song: song.song.split('-')[0].trim(),
+        artist: song.artist.trim()
     }))
 }
