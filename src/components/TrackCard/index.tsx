@@ -1,4 +1,5 @@
-import { Artist, Track } from "../../types/spotify";
+import { Track } from "../../types/spotify";
+import { getArtistNames } from "../../utils/spotify-utils";
 
 interface TrackProps {
     track: Track;
@@ -15,21 +16,10 @@ const TrackCard = ({ track }: TrackProps) => {
             <div className="text-sm md:text-base lg:text-lg">
                 <p className="text-base md:text-lg lg:text-xl font-bold">{name}</p>
                 <p>{album.name}</p>
-                <p className="text-xs md:text-sm lg:text-base">{artists?.length > 1 ? getTrackArtistNames(artists).join(', ') : artists[0].name}</p>
+                <p className="text-xs md:text-sm lg:text-base">{artists?.length > 1 ? getArtistNames(artists).join(', ') : artists[0].name}</p>
             </div>
         </div>
     )
 }
-
-const getTrackArtistNames = (artists: Artist[], limit = 3) => {
-    if (!artists) return [];
-
-    const names: string[] = [];
-    artists.forEach((artist, i) => {
-        if (i <= limit) names.push(artist.name);
-    });
-
-    return names;
-};
 
 export default TrackCard
