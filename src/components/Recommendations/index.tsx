@@ -21,7 +21,7 @@ const Recommendations = () => {
     }
 
     return (
-        <div className="flex-row justify-center items-center text-zinc-700">
+        <div className="flex-row justify-center items-center mt-20 text-zinc-700">
             {
                 isLoading ? (
                     <div className="flex items-center">
@@ -33,7 +33,7 @@ const Recommendations = () => {
                     </div>
                 ) :
                     recommendedTracks ? <section>
-                        <div className="flex justify-center items-center mb-6">
+                        <div className="flex justify-center items-center mb-4">
                             <Button text='Month' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.SHORT)} outlineDotted customClass={classNames('mr-4 h-8 px-4',
                                 {
                                     'outline-violet-300': selectedTimeRange === UserTopTimeRange.SHORT
@@ -48,7 +48,7 @@ const Recommendations = () => {
                                 })} textClass="group-hover:animate-pulse group-focus:animate-pulse text-zinc-700" disabled={selectedTimeRange === UserTopTimeRange.LONG} />
                         </div>
 
-                        <h2 className="mb-6 text-xl font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{recommendedTracks.length}</span> recommendations for you</h2>
+                        <h2 className="mb-4 text-xl text-center font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{recommendedTracks.length}</span> recommendations for you</h2>
                         {recommendedTracks.map((track) => <TrackCard key={track.id} track={track} />)}
                     </section> :
                         <section className="flex-row justify-center items-center">

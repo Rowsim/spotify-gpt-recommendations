@@ -7,7 +7,7 @@ const Home = () => {
     const [hasSpotifyToken, _setHasSpotifyToken] = useState(getWithExpiry("spotifyToken") != null);
 
     return (
-        <div className="App bg-indigo-50 font-montserrat h-full w-full">
+        <div className="bg-indigo-50 font-montserrat h-full w-full overflow-y-auto">
             <div className='flex justify-center items-center h-full w-full'>
                 {
                     hasSpotifyToken ? <Recommendations /> : <SpotifyConnect />

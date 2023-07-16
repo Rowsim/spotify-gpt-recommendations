@@ -12,62 +12,35 @@ const openaiClient = new OpenAIApi(new Configuration({
 }));
 
 export const getRecommendations = async (term: string) => {
-    // console.log("Delayed for 3 seconds.");
-    // await new Promise(r => setTimeout(r, 3000));
-
-    const topTracks = await getUserTopTracks(term, 5);
+    const topTracks = await getUserTopTracks(term, 10);
     console.debug('topTracks', topTracks);
-    const gptQuery = topTracksToGptQuery(topTracks.items, 5);
+    const gptQuery = topTracksToGptQuery(topTracks.items, 10);
     console.debug('gptQuery', gptQuery)
     const gptResponse = await queryOpenAIChat(gptQuery);
     console.debug('gptResponse', gptResponse);
     const gptSongs = parseGptSongResponse(gptResponse!)
     console.debug('gptSongs', gptSongs)
-    const searchResponse = await spotifySearchTrack(gptSongs[0])
-    console.debug('searchResponse', searchResponse);
 
-    // TODO Search spotify for each track
+    const tracksFromSearch = await Promise.allSettled(gptSongs.map(spotifySearchTrack))
+    console.debug('tracksFromSearch', tracksFromSearch);
+    const tracksResult: Track[] = [];
+    tracksFromSearch.forEach(result => {
+        if (result.status === 'fulfilled') {
+            tracksResult.push(...result.value.tracks.items)
+        } else {
+            console.info(result.status, result.reason)
+        }
+    })
 
-    return [
-        {
-            id: '11',
-            name: 'Who Told You (feat. Drake)',
-            images: [
-                { url: 'https://allmusicmagazine.com/wp-content/uploads/2023/07/unnamed-12.jpeg', height: 1, width: 1 }
-            ],
-            duration_ms: 210000,
-            artists: [
-                {
-                    name: 'J Hus'
-                },
-                {
-                    name: 'Drake'
-                }
-            ],
-            album: {
-                name: 'Beautiful and Brutal Yard'
-            }
-        } as any,
-        {
-            id: '22',
-            name: 'Rich Flex',
-            images: [
-                { url: 'https://upload.wikimedia.org/wikipedia/en/a/a5/Her_Loss.jpeg', height: 1, width: 1 }
-            ],
-            duration_ms: 210000,
-            artists: [
-                {
-                    name: 'Drake'
-                },
-                {
-                    name: '21 Savage'
-                }
-            ],
-            album: {
-                name: 'Her Loss'
-            }
-        } as any
-    ];
+    // const tracksResult: Track[] = [];
+    // for (const song of gptSongs) {
+    //     const searchResult = await spotifySearchTrack(song)
+    //     console.debug('gptSong, searchResult', song, searchResult)
+    //     tracksResult.push(...searchResult.tracks.items)
+    //     await new Promise(r => setTimeout(r, 250));
+    // }
+    console.debug('tracksResult', tracksResult)
+    return tracksResult;
 }
 
 const getUserTopTracks = async (
@@ -98,15 +71,19 @@ const spotifySearchTrack = async (gptSong: GptSong) => {
     console.log(`GET ${SPOTIFY_API_URL}/search`);
     const trackQuerySongAndArtist = `track:${gptSong.song} artist:${gptSong.artist}`
     const searchResults = await spotifySearch(`${encodeURIComponent(trackQuerySongAndArtist)}&type=track&market=GB&limit=1`);
-    if (searchResults.tracks.items >= 1) return searchResults;
+    if (searchResults.tracks.items.length >= 1) return searchResults;
 
-    // Looks like cgpt mixes up tracks with different artists ocassionally..
-    // so we'll do a more generic search if the first one has no results
     const trackQuery = `track:${gptSong.song}`
     return await spotifySearch(`${encodeURIComponent(trackQuery)}&type=track&market=GB&limit=1`);
 }
 
-const spotifySearch = async (query: string) => {
+
+interface SpotifySearchTracksResponse {
+    tracks: {
+        items: Track[]
+    }
+}
+const spotifySearch = async (query: string): Promise<SpotifySearchTracksResponse> => {
     const spotifyToken = await checkSpotifyTokenAndRefresh();
     console.log(`GET ${SPOTIFY_API_URL}/search`);
     if (!spotifyToken) return Promise.reject("Missing spotify auth token");
@@ -152,7 +129,7 @@ const parseGptSongResponse = (response: string): GptSong[] => {
     if (response.includes('```json')) {
         jsonString = response.split('json\n')[1].replace(/(\r\n|\n|\r)/gm, "").split('```')[0]
     } else {
-        jsonString = `[${response.split('[')[1]}`
+        jsonString = `[${response.split('[')[1].split(']')[0]}]`
     }
     const songs = JSON.parse(jsonString);
     console.debug('songsJson', songs);
