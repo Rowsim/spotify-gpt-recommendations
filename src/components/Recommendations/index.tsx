@@ -4,24 +4,26 @@ import { Button } from "../Button"
 import { Track, UserTopTimeRange } from "../../types/spotify";
 import classNames from "classnames";
 import TrackCard from "../TrackCard";
+import SpotifyLogo from '../../assets/images/spotify.svg'
+import ChatGptLogo from '../../assets/images/chatgpt.png'
 
 const Recommendations = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTimeRange, setSelectedTimeRange] = useState<undefined | UserTopTimeRange>();
-    const [recommendedTracks, setRecommendedTracks] = useState<Track[]>();
+    const [gptRecommendedTracks, setGptRecommendedTracks] = useState<Track[]>();
 
     const handleGetRecommendationsClick = async (term: UserTopTimeRange) => {
         if (term === selectedTimeRange) return;
         setSelectedTimeRange(term);
         setIsLoading(true);
         try {
-            setRecommendedTracks(await getRecommendations(term));
+            setGptRecommendedTracks(await getRecommendations(term));
         } catch { }
         setIsLoading(false);
     }
 
     return (
-        <div className="flex-row justify-center items-center mt-20 text-zinc-700">
+        <div className="flex-row justify-center items-center mt-16 max-h-[100vh] text-zinc-700">
             {
                 isLoading ? (
                     <div className="flex items-center">
@@ -32,7 +34,7 @@ const Recommendations = () => {
                         </svg>
                     </div>
                 ) :
-                    recommendedTracks ? <section>
+                    gptRecommendedTracks ? <section>
                         <div className="flex justify-center items-center mb-4">
                             <Button text='Month' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.SHORT)} outlineDotted customClass={classNames('mr-4 h-8 px-4',
                                 {
@@ -48,8 +50,32 @@ const Recommendations = () => {
                                 })} textClass="group-hover:animate-pulse group-focus:animate-pulse text-zinc-700" disabled={selectedTimeRange === UserTopTimeRange.LONG} />
                         </div>
 
-                        <h2 className="mb-4 text-xl text-center font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{recommendedTracks.length}</span> recommendations for you</h2>
-                        {recommendedTracks.map((track) => <TrackCard key={track.id} track={track} />)}
+                        <div className="relative flex py-5 items-center mb-4">
+                            <div className="flex-grow border-t border-zinc-400"></div>
+                            <h2 className="mx-4 text-xl text-center font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{gptRecommendedTracks.length}</span> recommendations for you</h2>
+                            <div className="flex-grow border-t border-zinc-400"></div>
+                        </div>
+                        <div className="sm:flex-row md:flex">
+                            <div className="mb-8 md:mr-16">
+                                <div className="mb-4 flex justify-center">
+                                    <div className="flex items-center justify-center px-2 text-white bg-zinc-800 rounded">
+                                        <p className="text-bold text-lg md:text-xl lg:text-2xl">Chat GPT</p>
+                                        <img className="w-6 h-6 ml-2 rounded-full" src={ChatGptLogo} alt='chat-gpt-logo' />
+                                    </div>
+                                </div>
+                                {gptRecommendedTracks.map((track) => <TrackCard key={track.id} track={track} />)}
+                            </div>
+
+                            <div>
+                                <div className="mb-4 flex justify-center">
+                                    <div className="flex items-center justify-center px-4 text-white bg-zinc-800 rounded">
+                                        <p className="text-bold text-lg md:text-xl lg:text-2xl">Spotify</p>
+                                        <img className="w-6 h-6 ml-2" src={SpotifyLogo} alt='spotify-logo' />
+                                    </div>
+                                </div>
+                                {gptRecommendedTracks.map((track) => <TrackCard key={track.id} track={track} />)}
+                            </div>
+                        </div>
                     </section> :
                         <section className="flex-row justify-center items-center">
                             <h1 className="mb-2 text-2xl font-extrabold leading-none tracking-tight md:text-3xl lg:text-4xl">Generate <mark className="px-2 text-white bg-spotify-green rounded">recommendations</mark></h1>
