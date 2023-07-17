@@ -11,9 +11,16 @@ const openaiClient = new OpenAIApi(new Configuration({
     apiKey: process.env.REACT_APP_OPENAI_API_KEY,
 }));
 
-export const getRecommendations = async (term: string) => {
+interface Recommendations {
+    gptRecommendations: Track[]
+    spotifyRecommendations: Track[]
+}
+export const getRecommendations = async (term: string): Promise<Recommendations> => {
     const topTracks = await getUserTopTracks(term, 10);
     console.debug('topTracks', topTracks);
+    const spotifyRecommendations = (await getSpotifyRecommendations(topTracks.items)).tracks;
+    console.debug('spotifyRecommendations', spotifyRecommendations);
+
     const gptQuery = topTracksToGptQuery(topTracks.items, 10);
     console.debug('gptQuery', gptQuery)
     const gptResponse = await queryOpenAIChat(gptQuery);
@@ -23,14 +30,15 @@ export const getRecommendations = async (term: string) => {
 
     const tracksFromSearch = await Promise.allSettled(gptSongs.map(spotifySearchTrack))
     console.debug('tracksFromSearch', tracksFromSearch);
-    const tracksResult: Track[] = [];
+    const gptRecommendations: Track[] = [];
     tracksFromSearch.forEach(result => {
         if (result.status === 'fulfilled') {
-            tracksResult.push(...result.value.tracks.items)
+            gptRecommendations.push(...result.value.tracks.items)
         } else {
             console.info(result.status, result.reason)
         }
     })
+    console.debug('gptRecommendations', gptRecommendations)
 
     // const tracksResult: Track[] = [];
     // for (const song of gptSongs) {
@@ -39,8 +47,7 @@ export const getRecommendations = async (term: string) => {
     //     tracksResult.push(...searchResult.tracks.items)
     //     await new Promise(r => setTimeout(r, 250));
     // }
-    console.debug('tracksResult', tracksResult)
-    return tracksResult;
+    return { gptRecommendations, spotifyRecommendations };
 }
 
 const getUserTopTracks = async (
@@ -66,6 +73,29 @@ const getUserTopTracks = async (
 
     return Promise.reject("Invalid spotify auth token :(");
 };
+
+interface SpotifyRecommendationsResponse {
+    tracks: Track[]
+}
+const getSpotifyRecommendations = async (tracks: Track[]): Promise<SpotifyRecommendationsResponse> => {
+    const spotifyToken = await checkSpotifyTokenAndRefresh();
+    if (!spotifyToken) return Promise.reject("Missing spotify token");
+
+    console.log(`GET ${SPOTIFY_API_URL}/me/top/tracks`);
+    const seedArtists = [...tracks.flatMap(track => track.artists).map(artist => artist.id)].slice(0,3).join(',')
+    const seedTracks = [...tracks.map(track => track.id)].slice(0,2).join(',')
+    const recommendationsResponse = await fetch(
+        `${SPOTIFY_API_URL}/recommendations?limit=10&market=GB&seed_artists=${encodeURIComponent(seedArtists)}&seed_tracks=${encodeURIComponent(seedTracks)}`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${spotifyToken}`,
+            },
+        }
+    );
+
+    return await recommendationsResponse.json();
+}
 
 const spotifySearchTrack = async (gptSong: GptSong) => {
     console.log(`GET ${SPOTIFY_API_URL}/search`);

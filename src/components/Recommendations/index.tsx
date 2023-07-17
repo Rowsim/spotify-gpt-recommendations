@@ -11,14 +11,19 @@ const Recommendations = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTimeRange, setSelectedTimeRange] = useState<undefined | UserTopTimeRange>();
     const [gptRecommendedTracks, setGptRecommendedTracks] = useState<Track[]>();
+    const [spotifyRecommendedTracks, setSpotifyRecommendedTracks] = useState<Track[]>();
 
     const handleGetRecommendationsClick = async (term: UserTopTimeRange) => {
         if (term === selectedTimeRange) return;
         setSelectedTimeRange(term);
         setIsLoading(true);
         try {
-            setGptRecommendedTracks(await getRecommendations(term));
-        } catch { }
+            const { gptRecommendations, spotifyRecommendations } = await getRecommendations(term);
+            setGptRecommendedTracks(gptRecommendations);
+            setSpotifyRecommendedTracks(spotifyRecommendations);
+        } catch (e) {
+            console.error(e);
+        }
         setIsLoading(false);
     }
 
@@ -34,7 +39,7 @@ const Recommendations = () => {
                         </svg>
                     </div>
                 ) :
-                    gptRecommendedTracks ? <section>
+                    (gptRecommendedTracks || spotifyRecommendedTracks) ? <section>
                         <div className="flex justify-center items-center mb-4">
                             <Button text='Month' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.SHORT)} outlineDotted customClass={classNames('mr-4 h-8 px-4',
                                 {
@@ -52,7 +57,7 @@ const Recommendations = () => {
 
                         <div className="relative flex py-5 items-center mb-4">
                             <div className="flex-grow border-t border-zinc-400"></div>
-                            <h2 className="mx-4 text-xl text-center font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{gptRecommendedTracks.length}</span> recommendations for you</h2>
+                            <h2 className="mx-4 text-xl text-center font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{(gptRecommendedTracks?.length ?? 0) + (spotifyRecommendedTracks?.length ?? 0)}</span> recommendations for you</h2>
                             <div className="flex-grow border-t border-zinc-400"></div>
                         </div>
                         <div className="sm:flex-row md:flex">
@@ -63,7 +68,7 @@ const Recommendations = () => {
                                         <img className="w-6 h-6 ml-2 rounded-full" src={ChatGptLogo} alt='chat-gpt-logo' />
                                     </div>
                                 </div>
-                                {gptRecommendedTracks.map((track) => <TrackCard key={track.id} track={track} />)}
+                                {gptRecommendedTracks?.map((track) => <TrackCard key={track.id} track={track} />)}
                             </div>
 
                             <div>
@@ -73,7 +78,7 @@ const Recommendations = () => {
                                         <img className="w-6 h-6 ml-2" src={SpotifyLogo} alt='spotify-logo' />
                                     </div>
                                 </div>
-                                {gptRecommendedTracks.map((track) => <TrackCard key={track.id} track={track} />)}
+                                {spotifyRecommendedTracks?.map((track) => <TrackCard key={track.id} track={track} reversed />)}
                             </div>
                         </div>
                     </section> :
