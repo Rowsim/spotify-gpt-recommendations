@@ -1,5 +1,5 @@
 import { checkSpotifyTokenAndRefresh } from "./spotify-auth";
-import { Track } from '../types/spotify';
+import { Playlist, Track } from '../types/spotify';
 import { getArtistNames } from "../utils/spotify-utils";
 import { Configuration, OpenAIApi } from "openai";
 
@@ -81,7 +81,7 @@ const getSpotifyRecommendations = async (tracks: Track[]): Promise<SpotifyRecomm
     const spotifyToken = await checkSpotifyTokenAndRefresh();
     if (!spotifyToken) return Promise.reject("Missing spotify token");
 
-    console.log(`GET ${SPOTIFY_API_URL}/me/top/tracks`);
+    console.log(`GET ${SPOTIFY_API_URL}/recommendations`);
     const seedArtists = [...tracks.flatMap(track => track.artists).map(artist => artist.id)].slice(0,3).join(',')
     const seedTracks = [...tracks.map(track => track.id)].slice(0,2).join(',')
     const recommendationsResponse = await fetch(
@@ -167,4 +167,26 @@ const parseGptSongResponse = (response: string): GptSong[] => {
         song: song.song.split('-')[0].trim(),
         artist: song.artist.trim()
     }))
+}
+
+
+interface SpotifyPlaylistsResponse {
+    items: Playlist[]
+}
+export const getUserSpotifyPlaylists = async (): Promise<SpotifyPlaylistsResponse> => {
+    const spotifyToken = await checkSpotifyTokenAndRefresh();
+    if (!spotifyToken) return Promise.reject("Missing spotify token");
+
+    console.log(`GET ${SPOTIFY_API_URL}/me/top/tracks`);
+    const playlistsResponse = await fetch(
+        `${SPOTIFY_API_URL}/me/playlists`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${spotifyToken}`,
+            },
+        }
+    );
+
+    return await playlistsResponse.json();
 }

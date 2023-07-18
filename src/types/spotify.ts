@@ -58,3 +58,9 @@ interface Image {
 interface followers {
   total: number;
 }
+
+export interface Playlist {
+  description: string;
+  id: string;
+  name: string;
+}

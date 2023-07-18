@@ -6,7 +6,7 @@ const Base64 = require("crypto-js/enc-base64");
 const REDIRECT_URI =
   process.env.REACT_APP_AUTH_REDIRECT_URI || "http://localhost:3000/callback";
 const CLIENT_ID = "9b8a9591de894d3f9bba578e15aced7d";
-const REQUEST_SCOPES = "user-top-read streaming";
+const REQUEST_SCOPES = "user-top-read playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public streaming";
 
 export enum GrantType {
   AUTH = "authorization_code",

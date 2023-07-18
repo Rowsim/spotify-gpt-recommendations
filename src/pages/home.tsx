@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useContext, useEffect } from "react";
 import { SpotifyConnect } from "../components/SpotifyConnect";
 import { getWithExpiry } from "../utils/local-storage";
 import Recommendations from "../components/Recommendations";
+import { AppContext } from "../AppContext";
 
 const Home = () => {
-    const [hasSpotifyToken, _setHasSpotifyToken] = useState(getWithExpiry("spotifyToken") != null);
+    const { hasSpotifyToken, setHasSpotifyToken } = useContext(AppContext)
+
+    useEffect(() => {
+        setHasSpotifyToken(getWithExpiry("spotifyToken") != null)
+    }, []);
 
     return (
         <div className="bg-indigo-50 font-montserrat h-full w-full overflow-y-auto">
