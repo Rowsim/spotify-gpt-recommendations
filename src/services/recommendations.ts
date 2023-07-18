@@ -177,7 +177,7 @@ export const getUserSpotifyPlaylists = async (): Promise<SpotifyPlaylistsRespons
     const spotifyToken = await checkSpotifyTokenAndRefresh();
     if (!spotifyToken) return Promise.reject("Missing spotify token");
 
-    console.log(`GET ${SPOTIFY_API_URL}/me/top/tracks`);
+    console.log(`GET ${SPOTIFY_API_URL}/me/playlists`);
     const playlistsResponse = await fetch(
         `${SPOTIFY_API_URL}/me/playlists`,
         {

@@ -1,17 +1,28 @@
-import { useState } from "react";
-import { getRecommendations } from "../../services/recommendations";
+import { useContext, useEffect, useState } from "react";
+import { getRecommendations, getUserSpotifyPlaylists } from "../../services/recommendations";
 import { Button } from "../Button"
 import { Track, UserTopTimeRange } from "../../types/spotify";
 import classNames from "classnames";
 import TrackCard from "../TrackCard";
 import SpotifyLogo from '../../assets/images/spotify.svg'
 import ChatGptLogo from '../../assets/images/chatgpt.png'
+import { AppContext } from "../../AppContext";
 
 const Recommendations = () => {
+    const { userPlaylists, setUserPlaylists } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTimeRange, setSelectedTimeRange] = useState<undefined | UserTopTimeRange>();
     const [gptRecommendedTracks, setGptRecommendedTracks] = useState<Track[]>();
     const [spotifyRecommendedTracks, setSpotifyRecommendedTracks] = useState<Track[]>();
+
+    useEffect(() => {
+        if (!userPlaylists) {
+            const getSpotifyPlaylists = async () => {
+                setUserPlaylists((await getUserSpotifyPlaylists()).items)
+            }
+            getSpotifyPlaylists();
+        }
+    }, [])
 
     const handleGetRecommendationsClick = async (term: UserTopTimeRange) => {
         if (term === selectedTimeRange) return;
