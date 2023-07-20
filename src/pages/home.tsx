@@ -3,6 +3,7 @@ import { SpotifyConnect } from "../components/SpotifyConnect";
 import { getWithExpiry } from "../utils/local-storage";
 import Recommendations from "../components/Recommendations";
 import { AppContext } from "../AppContext";
+import { Toast } from "../components/Toast";
 
 const Home = () => {
     const { hasSpotifyToken, setHasSpotifyToken } = useContext(AppContext)
@@ -18,6 +19,8 @@ const Home = () => {
                     hasSpotifyToken ? <Recommendations /> : <SpotifyConnect />
                 }
             </div>
+
+            <Toast />
         </div>
     )
 }

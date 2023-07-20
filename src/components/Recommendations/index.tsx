@@ -9,7 +9,7 @@ import ChatGptLogo from '../../assets/images/chatgpt.png'
 import { AppContext } from "../../AppContext";
 
 const Recommendations = () => {
-    const { userPlaylists, setUserPlaylists } = useContext(AppContext);
+    const { userPlaylists, setUserPlaylists, setToastWithExpiry } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTimeRange, setSelectedTimeRange] = useState<undefined | UserTopTimeRange>();
     const [gptRecommendedTracks, setGptRecommendedTracks] = useState<Track[]>();
@@ -17,10 +17,7 @@ const Recommendations = () => {
 
     useEffect(() => {
         if (!userPlaylists) {
-            const getSpotifyPlaylists = async () => {
-                setUserPlaylists((await getUserSpotifyPlaylists()).items)
-            }
-            getSpotifyPlaylists();
+            (async () => setUserPlaylists((await getUserSpotifyPlaylists()).items))()
         }
     }, [])
 
@@ -34,6 +31,7 @@ const Recommendations = () => {
             setSpotifyRecommendedTracks(spotifyRecommendations);
         } catch (e) {
             console.error(e);
+            setToastWithExpiry({ message: 'Failed to generate suggestions', error: true, ttlMs: 4000 })
         }
         setIsLoading(false);
     }

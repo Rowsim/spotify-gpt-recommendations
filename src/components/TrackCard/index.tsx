@@ -15,7 +15,23 @@ const TrackCard = ({ track, reversed }: TrackProps) => {
     const { id, name, duration_ms, album, artists } = track;
     const durationDate = new Date(duration_ms);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const { userPlaylists } = useContext(AppContext);
+    const { userPlaylists, setToastWithExpiry } = useContext(AppContext);
+
+    const handleAddToPlaylist = async (playlistId?: string, playlistName?: string) => {
+        try {
+            await addTrackToUserSpotifyPlaylist(playlistId!, id)
+            setToastWithExpiry({
+                message: `Added to ${playlistName}`,
+                ttlMs: 4000
+            })
+        } catch {
+            setToastWithExpiry({
+                message: `Failed to add to playlist`,
+                ttlMs: 4000,
+                error: true
+            })
+        }
+    }
 
     return (
         <div className={
@@ -47,7 +63,7 @@ const TrackCard = ({ track, reversed }: TrackProps) => {
                     value: playlist.id
                 }))}
                 dropdownItemsClass={`${reversed ? 'sm:right-0 md:left-0' : 'right-0'}`}
-                onItemClick={async (playlistId?: string) => await addTrackToUserSpotifyPlaylist(playlistId!, id)}
+                onItemClick={(playlistId, playlistName) => handleAddToPlaylist(playlistId, playlistName)}
             />
         </div>
     )
