@@ -15,7 +15,6 @@ const CallbackPage = () => {
         queryParams.state as string,
         queryParams.code as string
       ).then((success) => {
-        console.debug('getUserAccessToken then ::', success)
         setSuccessfulSignIn(success);
       });
     }
