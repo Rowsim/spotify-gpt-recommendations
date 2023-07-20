@@ -4,6 +4,7 @@ import { getArtistNames } from "../../utils/spotify-utils";
 import { useContext, useState } from "react";
 import { AppContext } from "../../AppContext";
 import { DropdownButton } from "../DropdownButton";
+import { addTrackToUserSpotifyPlaylist } from "../../services/recommendations";
 
 interface TrackProps {
     track: Track;
@@ -11,7 +12,7 @@ interface TrackProps {
 }
 
 const TrackCard = ({ track, reversed }: TrackProps) => {
-    const { name, duration_ms, album, artists } = track;
+    const { id, name, duration_ms, album, artists } = track;
     const durationDate = new Date(duration_ms);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const { userPlaylists } = useContext(AppContext);
@@ -46,7 +47,7 @@ const TrackCard = ({ track, reversed }: TrackProps) => {
                     value: playlist.id
                 }))}
                 dropdownItemsClass={`${reversed ? 'sm:right-0 md:left-0' : 'right-0'}`}
-                onItemClick={(p?: string) => console.debug(p)}
+                onItemClick={async (playlistId?: string) => await addTrackToUserSpotifyPlaylist(playlistId!, id)}
             />
         </div>
     )

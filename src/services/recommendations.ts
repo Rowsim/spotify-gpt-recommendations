@@ -82,8 +82,8 @@ const getSpotifyRecommendations = async (tracks: Track[]): Promise<SpotifyRecomm
     if (!spotifyToken) return Promise.reject("Missing spotify token");
 
     console.log(`GET ${SPOTIFY_API_URL}/recommendations`);
-    const seedArtists = [...tracks.flatMap(track => track.artists).map(artist => artist.id)].slice(0,3).join(',')
-    const seedTracks = [...tracks.map(track => track.id)].slice(0,2).join(',')
+    const seedArtists = [...tracks.flatMap(track => track.artists).map(artist => artist.id)].slice(0, 3).join(',')
+    const seedTracks = [...tracks.map(track => track.id)].slice(0, 2).join(',')
     const recommendationsResponse = await fetch(
         `${SPOTIFY_API_URL}/recommendations?limit=10&market=GB&seed_artists=${encodeURIComponent(seedArtists)}&seed_tracks=${encodeURIComponent(seedTracks)}`,
         {
@@ -179,7 +179,7 @@ export const getUserSpotifyPlaylists = async (): Promise<SpotifyPlaylistsRespons
 
     console.log(`GET ${SPOTIFY_API_URL}/me/playlists`);
     const playlistsResponse = await fetch(
-        `${SPOTIFY_API_URL}/me/playlists`,
+        `${SPOTIFY_API_URL}/me/playlists?limit=50`,
         {
             method: "GET",
             headers: {
@@ -189,4 +189,23 @@ export const getUserSpotifyPlaylists = async (): Promise<SpotifyPlaylistsRespons
     );
 
     return await playlistsResponse.json();
+}
+
+export const addTrackToUserSpotifyPlaylist = async (playlistId: string, trackId: string) => {
+    const spotifyToken = await checkSpotifyTokenAndRefresh();
+    if (!spotifyToken) return Promise.reject("Missing spotify token");
+
+    console.log(`POST ${SPOTIFY_API_URL}/playlists/${playlistId}/tracks`);
+    await fetch(
+        `${SPOTIFY_API_URL}/playlists/${playlistId}/tracks`,
+        {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${spotifyToken}`,
+            },
+            body: JSON.stringify({
+                uris: [`spotify:track:${trackId}`]
+            })
+        }
+    );
 }
