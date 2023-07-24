@@ -7,6 +7,7 @@ import TrackCard from "../TrackCard";
 import SpotifyLogo from '../../assets/images/spotify.svg'
 import ChatGptLogo from '../../assets/images/chatgpt.png'
 import { AppContext } from "../../AppContext";
+import SpotifyPlayer from "../SpotifyPlayer";
 
 const Recommendations = () => {
     const { userPlaylists, setUserPlaylists, setToastWithExpiry } = useContext(AppContext);
@@ -37,7 +38,8 @@ const Recommendations = () => {
     }
 
     return (
-        <div className="flex-row justify-center items-center mt-16 max-h-[100vh] text-zinc-700">
+        <div className="flex-row justify-center mt-10 max-h-[100vh] text-zinc-700">
+            <SpotifyPlayer />
             {
                 isLoading ? (
                     <div className="flex items-center">
@@ -69,9 +71,26 @@ const Recommendations = () => {
                             <h2 className="mx-4 text-xl text-center font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">{(gptRecommendedTracks?.length ?? 0) + (spotifyRecommendedTracks?.length ?? 0)}</span> recommendations for you</h2>
                             <div className="flex-grow border-t border-zinc-400"></div>
                         </div>
-                        <div className="sm:flex-row md:flex">
+
+                        <div className="sm:flex-row md:flex px-2 mb-3 w-full justify-around">
+                            <div className="hidden md:flex justify-center">
+                                <div className="flex items-center justify-center px-2 text-white bg-zinc-800 rounded">
+                                    <p className="text-bold text-lg md:text-xl lg:text-2xl">Chat GPT</p>
+                                    <img className="w-6 h-6 ml-2 rounded-full" src={ChatGptLogo} alt='chat-gpt-logo' />
+                                </div>
+                            </div>
+
+                            <div className="hidden md:flex justify-center">
+                                <div className="flex items-center justify-center px-4 text-white bg-zinc-800 rounded">
+                                    <p className="text-bold text-lg md:text-xl lg:text-2xl">Spotify</p>
+                                    <img className="w-6 h-6 ml-2" src={SpotifyLogo} alt='spotify-logo' />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="sm:flex-row md:flex overflow-y-auto max-h-[75vh] px-2">
                             <div className="mb-8 md:mr-16">
-                                <div className="mb-4 flex justify-center">
+                                <div className="md:hidden mb-4 flex justify-center">
                                     <div className="flex items-center justify-center px-2 text-white bg-zinc-800 rounded">
                                         <p className="text-bold text-lg md:text-xl lg:text-2xl">Chat GPT</p>
                                         <img className="w-6 h-6 ml-2 rounded-full" src={ChatGptLogo} alt='chat-gpt-logo' />
@@ -81,7 +100,7 @@ const Recommendations = () => {
                             </div>
 
                             <div>
-                                <div className="mb-4 flex justify-center">
+                                <div className="md:hidden mb-4 flex justify-center">
                                     <div className="flex items-center justify-center px-4 text-white bg-zinc-800 rounded">
                                         <p className="text-bold text-lg md:text-xl lg:text-2xl">Spotify</p>
                                         <img className="w-6 h-6 ml-2" src={SpotifyLogo} alt='spotify-logo' />

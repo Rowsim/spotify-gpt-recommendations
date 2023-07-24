@@ -1,5 +1,5 @@
-import { createContext, useState } from "react";
-import { Playlist } from "./types/spotify";
+import { Dispatch, SetStateAction, createContext, useState } from "react";
+import { Playlist, SpotifyPlayerState } from "./types/spotify";
 
 interface Toast {
   message: string,
@@ -13,6 +13,8 @@ interface AppContextType {
   setUserPlaylists: Function;
   toast: Toast | undefined
   setToastWithExpiry: Function;
+  spotifyPlayerState: SpotifyPlayerState | undefined;
+  setSpotifyPlayerState: Dispatch<SetStateAction<SpotifyPlayerState | undefined>>;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -21,13 +23,16 @@ export const AppContext = createContext<AppContextType>({
   userPlaylists: [],
   setUserPlaylists: () => { },
   toast: undefined,
-  setToastWithExpiry: () => { }
+  setToastWithExpiry: () => { },
+  setSpotifyPlayerState: () => { },
+  spotifyPlayerState: undefined
 });
 
 export const AppProvider = ({ children }: any) => {
   const [hasSpotifyToken, setHasSpotifyToken] = useState(false);
   const [userPlaylists, setUserPlaylists] = useState<Playlist[] | undefined>();
   const [toast, setToast] = useState<Toast | undefined>();
+  const [spotifyPlayerState, setSpotifyPlayerState] = useState<SpotifyPlayerState | undefined>();
 
   const setToastWithExpiry = (toast: Toast) => {
     setToast(toast)
@@ -44,7 +49,9 @@ export const AppProvider = ({ children }: any) => {
         userPlaylists,
         setUserPlaylists,
         toast,
-        setToastWithExpiry
+        setToastWithExpiry,
+        spotifyPlayerState,
+        setSpotifyPlayerState
       }}
     >
       {children}

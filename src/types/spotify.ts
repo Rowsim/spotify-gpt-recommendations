@@ -64,3 +64,35 @@ export interface Playlist {
   id: string;
   name: string;
 }
+
+export interface SpotifyPlayerState {
+  paused: boolean;
+  duration: number;
+  position: number;
+  repeat_mode: number;
+  disallows: {
+    pausing: boolean;
+    skipping_prev: boolean;
+  };
+  timestamp: number;
+  track_window: TrackWindow;
+}
+
+interface TrackWindow {
+  current_track: PlayerTrack;
+  next_tracks: PlayerTrack[];
+  previous_tracks: PlayerTrack[];
+}
+
+export interface PlayerTrack {
+  name: string;
+  uri: string;
+  album: {
+    images: Image[];
+  };
+  artists: [
+    {
+      name: string;
+    }
+  ];
+}

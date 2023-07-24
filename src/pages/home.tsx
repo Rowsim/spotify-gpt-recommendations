@@ -13,7 +13,7 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="bg-indigo-50 font-montserrat h-full w-full overflow-y-auto">
+        <div className="bg-indigo-50 font-montserrat h-full w-full overflow-y-auto overflow-x-hidden">
             <div className='flex justify-center items-center h-full w-full'>
                 {
                     hasSpotifyToken ? <Recommendations /> : <SpotifyConnect />

@@ -1,15 +1,8 @@
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { AppContext } from "../../AppContext"
 
 export const Toast = () => {
-    const { toast, setToastWithExpiry } = useContext(AppContext);
-    useEffect(() => {
-        setToastWithExpiry({
-            message: 'Test message!Test message!',
-            error: false,
-            ttlMs: 5000
-        })
-    }, [])
+    const { toast } = useContext(AppContext);
 
     return (
         <>
