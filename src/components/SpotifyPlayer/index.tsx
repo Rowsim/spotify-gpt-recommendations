@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../AppContext";
 import { checkSpotifyTokenAndRefresh } from "../../services/spotify-auth";
 import { setActivePlayer } from "../../services/spotify-player";
@@ -9,13 +9,14 @@ import { Player } from "./player";
 const PlayerContainer = () => {
     const { setSpotifyPlayerState } = useContext(AppContext);
     const [playerWebSDKConnected, setPlayerWebSDKConnected] = useState(false);
+    const playButtonRef = useRef(null);
 
     useEffect(() => {
         if (playerWebSDKConnected) return;
         const spotifyScript = loadSpotifySDKScript();
         window.onSpotifyWebPlaybackSDKReady = () => {
             const token = checkSpotifyTokenAndRefresh();
-            const player: any = new Spotify.Player({
+            const player = new Spotify.Player({
                 name: "Spotify Recommendations Web Player",
                 getOAuthToken: (cb) => {
                     cb(token);
@@ -68,7 +69,7 @@ const PlayerContainer = () => {
         };
     }, []);
 
-    if (playerWebSDKConnected) return <Player />;
+    if (playerWebSDKConnected) return <Player playButtonRef={playButtonRef} />;
     else return null;
 };
 
