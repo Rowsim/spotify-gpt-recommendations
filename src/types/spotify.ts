@@ -85,6 +85,7 @@ interface TrackWindow {
 }
 
 export interface PlayerTrack {
+  id: string;
   name: string;
   uri: string;
   album: {
