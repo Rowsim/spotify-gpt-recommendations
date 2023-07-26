@@ -47,3 +47,14 @@ export const setActivePlayer = async (playerId: string, play = false) => {
     body: JSON.stringify({ device_ids: [playerId], play }),
   });
 };
+
+export const seek = async (positionMs: number) => {
+  const spotifyToken = await checkSpotifyTokenAndRefresh();
+
+  await fetch(`${SPOTIFY_API_URL}/seek?position_ms=${Math.round(positionMs)}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${spotifyToken}`,
+    }
+  });
+}

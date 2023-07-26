@@ -9,7 +9,6 @@ import { Player } from "./player";
 const PlayerContainer = () => {
     const { setSpotifyPlayerState } = useContext(AppContext);
     const [playerWebSDKConnected, setPlayerWebSDKConnected] = useState(false);
-    const playButtonRef = useRef(null);
 
     useEffect(() => {
         if (playerWebSDKConnected) return;
@@ -69,7 +68,7 @@ const PlayerContainer = () => {
         };
     }, []);
 
-    if (playerWebSDKConnected) return <Player playButtonRef={playButtonRef} />;
+    if (playerWebSDKConnected) return <Player />;
     else return null;
 };
 

@@ -88,6 +88,7 @@ export interface PlayerTrack {
   id: string;
   name: string;
   uri: string;
+  duration_ms: number;
   album: {
     images: Image[];
   };

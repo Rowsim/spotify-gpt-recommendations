@@ -39,7 +39,6 @@ const Recommendations = () => {
 
     return (
         <div className="flex-row justify-center mt-10 max-h-[100vh] text-zinc-700">
-            <SpotifyPlayer />
             {
                 isLoading ? (
                     <div className="flex items-center">
@@ -51,6 +50,8 @@ const Recommendations = () => {
                     </div>
                 ) :
                     (gptRecommendedTracks || spotifyRecommendedTracks) ? <section>
+                        <SpotifyPlayer />
+
                         <div className="flex justify-center items-center mb-4">
                             <Button text='Month' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.SHORT)} outlineDotted customClass={classNames('mr-4 h-8 px-4',
                                 {
