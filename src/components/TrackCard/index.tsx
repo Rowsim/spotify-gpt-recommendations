@@ -64,8 +64,9 @@ const TrackCard = ({ track, reversed }: TrackProps) => {
                 })}>
                     <img width={80} height={80} src={album.images[0]?.url} alt={`${album.name}-cover`} />
                     <div className="top-0 left-0 absolute w-full h-full flex items-center justify-center">
-                        <svg version="1.1" className={classNames("h-6 w-6 fill-white opacity-50 group-hover:opacity-90 group-active:opacity-90 group-hover:fill-violet-400 group-active:fill-violet-500 group-focus:fill-violet-500", {
-                            'fill-violet-400 animate-pulse opacity-80': isTrackPlaying
+                        <svg version="1.1" className={classNames("h-6 w-6 opacity-50 group-hover:opacity-90 group-active:opacity-90 group-hover:fill-violet-400 group-active:fill-violet-500 group-focus:fill-violet-500", {
+                            'fill-violet-400 animate-pulse opacity-80': isTrackPlaying,
+                            'fill-white': !isTrackPlaying
                         })} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                             width="163.861px" height="163.861px" viewBox="0 0 163.861 163.861">
                             <path d="M34.857,3.613C20.084-4.861,8.107,2.081,8.107,19.106v125.637c0,17.042,11.977,23.975,26.75,15.509L144.67,97.275
