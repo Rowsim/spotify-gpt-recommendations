@@ -4,6 +4,7 @@ import { getWithExpiry } from "../utils/local-storage";
 import Recommendations from "../components/Recommendations";
 import { AppContext } from "../AppContext";
 import { Toast } from "../components/Toast";
+import SpotifyPlayer from "../components/SpotifyPlayer";
 
 const Home = () => {
     const { hasSpotifyToken, setHasSpotifyToken } = useContext(AppContext)
@@ -16,7 +17,10 @@ const Home = () => {
         <div className="bg-indigo-50 font-montserrat h-full w-full overflow-y-auto overflow-x-hidden">
             <div className='flex justify-center items-center h-full w-full'>
                 {
-                    hasSpotifyToken ? <Recommendations /> : <SpotifyConnect />
+                    hasSpotifyToken ? <>
+                        <SpotifyPlayer />
+                        <Recommendations />
+                    </> : < SpotifyConnect />
                 }
             </div>
 

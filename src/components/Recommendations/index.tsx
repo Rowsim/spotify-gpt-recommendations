@@ -7,7 +7,6 @@ import TrackCard from "../TrackCard";
 import SpotifyLogo from '../../assets/images/spotify.svg'
 import ChatGptLogo from '../../assets/images/chatgpt.png'
 import { AppContext } from "../../AppContext";
-import SpotifyPlayer from "../SpotifyPlayer";
 
 const Recommendations = () => {
     const { userPlaylists, setUserPlaylists, setToastWithExpiry } = useContext(AppContext);
@@ -38,7 +37,7 @@ const Recommendations = () => {
     }
 
     return (
-        <div className="flex-row justify-center mt-10 max-h-[100vh] text-zinc-700">
+        <div className="flex-row justify-center mt-20 max-h-[100vh] text-zinc-700">
             {
                 isLoading ? (
                     <div className="flex items-center">
@@ -50,8 +49,6 @@ const Recommendations = () => {
                     </div>
                 ) :
                     (gptRecommendedTracks || spotifyRecommendedTracks) ? <section>
-                        <SpotifyPlayer />
-
                         <div className="flex justify-center items-center mb-4">
                             <Button text='Month' onClick={() => handleGetRecommendationsClick(UserTopTimeRange.SHORT)} outlineDotted customClass={classNames('mr-4 h-8 px-4',
                                 {
@@ -89,7 +86,7 @@ const Recommendations = () => {
                             </div>
                         </div>
 
-                        <div className="sm:flex-row md:flex overflow-y-auto max-h-[75vh] px-2">
+                        <div className="sm:flex-row md:flex overflow-y-auto overflow-x-hidden max-h-[70vh] px-2">
                             <div className="mb-8 md:mr-16">
                                 <div className="md:hidden mb-4 flex justify-center">
                                     <div className="flex items-center justify-center px-2 text-white bg-zinc-800 rounded">
