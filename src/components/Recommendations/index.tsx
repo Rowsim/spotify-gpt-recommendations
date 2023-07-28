@@ -37,7 +37,7 @@ const Recommendations = () => {
     }
 
     return (
-        <div className="flex-row justify-center mt-20 max-h-[100vh] text-zinc-700">
+        <div className="flex-row justify-center mt-24 max-h-[100vh] text-zinc-700">
             {
                 isLoading ? (
                     <div className="flex items-center">
