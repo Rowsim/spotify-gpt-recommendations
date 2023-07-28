@@ -73,7 +73,7 @@ const TrackCard = ({ track, reversed }: TrackProps) => {
                         </svg>
                     </div>
                 </div>
-                <div className={classNames("text-xs md:text-sm lg:text-base whitespace-nowrap md:max-w-[320px]", {
+                <div className={classNames("text-xs md:text-sm lg:text-base whitespace-nowrap max-w-[70%] md:max-w-[320px]", {
                     'md:text-right': reversed
                 })}>
                     <p className={classNames("text-base md:text-lg lg:text-xl font-bold text-ellipsis overflow-hidden", {
