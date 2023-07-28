@@ -27,6 +27,9 @@ export interface Track {
   images: Array<Image>;
   artists: Array<Artist>;
   album: Album;
+  external_urls: {
+    spotify: string
+  }
 }
 
 export interface Album {

@@ -13,7 +13,7 @@ interface TrackProps {
 }
 
 const TrackCard = ({ track, reversed }: TrackProps) => {
-    const { id, name, duration_ms, album, artists } = track;
+    const { id, name, duration_ms, album, artists, external_urls } = track;
     const durationDate = new Date(duration_ms);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const { userPlaylists, setToastWithExpiry, spotifyPlayerState } = useContext(AppContext);
@@ -93,6 +93,7 @@ const TrackCard = ({ track, reversed }: TrackProps) => {
                 }))}
                 dropdownItemsClass={`${reversed ? 'sm:right-0 md:left-0' : 'right-0'}`}
                 onItemClick={(playlistId, playlistName) => handleAddToPlaylist(playlistId, playlistName)}
+                trackUrl={external_urls.spotify}
             />
         </div>
     )
