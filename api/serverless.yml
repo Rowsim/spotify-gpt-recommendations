@@ -1,0 +1,30 @@
+service: ${file(package.json):name}
+provider:
+  name: aws
+  runtime: nodejs18.x
+  profile: ${env:PROFILE, 'default'}
+  region: ${env:REGION, 'eu-west-2'}
+  stage: ${env:STAGE, 'dev'}
+  httpApi:	
+    authorizers:
+      spotifyAuthorizer:
+        type: request
+        enableSimpleResponses: true
+        identitySource: $request.header.Authorization
+        functionName: spotifyAuthorizer
+
+plugins:
+  - serverless-esbuild
+
+functions:
+  spotifyAuthorizer:
+    handler: src/authorizer.handler
+  	
+  getRecommendations:
+    handler: src/get-recommendations.GetRecommendations
+    events:
+      - httpApi:
+          method: GET
+          path: /recommendations
+          authorizer:
+            name: spotifyAuthorizer
