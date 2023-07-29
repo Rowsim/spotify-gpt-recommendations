@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { AppContext } from "../../AppContext"
 import { pause, play, seek } from "../../services/spotify-player"
 
@@ -7,7 +7,7 @@ export const Player = () => {
     const [durationSeekerValue, setDurationSeekerValue] = useState(0)
 
     useEffect(() => {
-        setDurationSeekerValue(spotifyPlayerState!.position)
+        setDurationSeekerValue(spotifyPlayerState?.position ?? 0)
         let durationSeekerInterval: string | number | NodeJS.Timeout | undefined;
 
         if (!spotifyPlayerState?.paused) {

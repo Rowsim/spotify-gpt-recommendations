@@ -6,7 +6,7 @@ export const handler = async (event) => {
         context: {}
     }
 
-    if (event.headers.authorization === "dev" || await checkSpotifyUser(event.headers.authorization)) {
+    if (event.headers.authorization === "dev-temp-tUYGJ_SV7GCTj17-44xA2" || await checkSpotifyUser(event.headers.authorization)) {
         response = {
             isAuthorized: true,
             context: {}

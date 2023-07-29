@@ -18,10 +18,10 @@ plugins:
 
 functions:
   spotifyAuthorizer:
-    handler: src/authorizer.handler
+    handler: src/functions/authorizer.handler
   	
   getRecommendations:
-    handler: src/get-recommendations.GetRecommendations
+    handler: src/functions/get-recommendations.GetRecommendations
     events:
       - httpApi:
           method: GET
