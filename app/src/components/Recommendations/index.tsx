@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { getRecommendations, getUserSpotifyPlaylists } from "../../services/recommendations";
+import { getRecommendations, getRecommendationsFromLambda, getUserSpotifyPlaylists } from "../../services/recommendations";
 import { Button } from "../Button"
 import { Track, UserTopTimeRange } from "../../types/spotify";
 import classNames from "classnames";
@@ -7,6 +7,8 @@ import TrackCard from "../TrackCard";
 import SpotifyLogo from '../../assets/images/spotify.svg'
 import ChatGptLogo from '../../assets/images/chatgpt.png'
 import { AppContext } from "../../AppContext";
+
+const GET_RECOMMENDATIONS_SERVER_SIDE = true;
 
 const Recommendations = () => {
     const { userPlaylists, setUserPlaylists, setToastWithExpiry } = useContext(AppContext);
@@ -24,7 +26,8 @@ const Recommendations = () => {
     const handleGetRecommendationsClick = async (term: UserTopTimeRange) => {
         setIsLoading(true);
         try {
-            const { gptRecommendations, spotifyRecommendations } = await getRecommendations(term);
+            const { gptRecommendations, spotifyRecommendations } = GET_RECOMMENDATIONS_SERVER_SIDE 
+            ? await getRecommendationsFromLambda(term) : await getRecommendations(term);
             setSelectedTimeRange(term);
             setGptRecommendedTracks(gptRecommendations);
             setSpotifyRecommendedTracks(spotifyRecommendations);
@@ -42,7 +45,7 @@ const Recommendations = () => {
                     <div className="flex items-center">
                         <h1 className="animate-pulse mr-2 text-xl font-extrabold leading-none tracking-tight md:text-2xl lg:text-3xl"><span className="underline underline-offset-3 decoration-4 decoration-spotify-green">Generating</span> suggestions!</h1>
                         <svg className="h-6 w-6 ml-2 fill-spotify-green opacity-70 animate-spin" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 12v-2l-4 3 4 3v-2h2.997A6.006 6.006 0 0 0 16 8h-2a4 4 0 0 1-3.996 4H7zM9 2H6.003A6.006 6.006 0 0 0 0 8h2a4 4 0 0 1 3.996-4H9v2l4-3-4-3v2z" fill-rule="evenodd" />
+                            <path d="M7 12v-2l-4 3 4 3v-2h2.997A6.006 6.006 0 0 0 16 8h-2a4 4 0 0 1-3.996 4H7zM9 2H6.003A6.006 6.006 0 0 0 0 8h2a4 4 0 0 1 3.996-4H9v2l4-3-4-3v2z" />
                         </svg>
                     </div>
                 ) :

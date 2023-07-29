@@ -1,5 +1,5 @@
 import { checkSpotifyTokenAndRefresh } from "./spotify-auth";
-import { Playlist, Track } from '../types/spotify';
+import { Playlist, Track, UserTopTimeRange } from '../types/spotify';
 import { getArtistNames } from "../utils/spotify-utils";
 import { Configuration, OpenAIApi } from "openai";
 
@@ -15,6 +15,20 @@ interface Recommendations {
     gptRecommendations: Track[]
     spotifyRecommendations: Track[]
 }
+export const getRecommendationsFromLambda = async (term: UserTopTimeRange): Promise<Recommendations> => {
+    const spotifyToken = await checkSpotifyTokenAndRefresh();
+    if (!spotifyToken) return Promise.reject('Invalid spotify token')
+    return (await fetch(
+        `https://pubzxxtvt9.execute-api.eu-west-2.amazonaws.com/recommendations?timeRange=${term}`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `${spotifyToken}`,
+            },
+        }
+    )).json()
+}
+
 export const getRecommendations = async (term: string): Promise<Recommendations> => {
     const topTracks = await getUserTopTracks(term, 10);
     console.debug('topTracks', topTracks);
