@@ -5,13 +5,18 @@ provider:
   profile: ${env:PROFILE, 'default'}
   region: ${env:REGION, 'eu-west-2'}
   stage: ${env:STAGE, 'dev'}
-  httpApi:	
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:3000
     authorizers:
       spotifyAuthorizer:
         type: request
         enableSimpleResponses: true
         identitySource: $request.header.Authorization
         functionName: spotifyAuthorizer
+  environment:
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY}
 
 plugins:
   - serverless-esbuild
@@ -22,6 +27,7 @@ functions:
   	
   getRecommendations:
     handler: src/functions/get-recommendations.GetRecommendations
+    timeout: 20
     events:
       - httpApi:
           method: GET
