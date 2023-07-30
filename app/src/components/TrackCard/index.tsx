@@ -18,8 +18,8 @@ const TrackCard = ({ track, reversed }: TrackProps) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const { userPlaylists, setToastWithExpiry, spotifyPlayerState } = useContext(AppContext);
 
-    const isTrackPlaying = useMemo(() => !spotifyPlayerState?.paused && spotifyPlayerState?.track_window.current_track.id === id
-        ,[spotifyPlayerState?.paused, spotifyPlayerState?.track_window?.current_track?.id])
+    const isTrackPlaying = useMemo(() => !spotifyPlayerState?.paused && spotifyPlayerState?.track_window.current_track.id === id,
+        [spotifyPlayerState?.paused, spotifyPlayerState?.track_window?.current_track?.id, id])
 
     const handleAddToPlaylist = async (playlistId?: string, playlistName?: string) => {
         try {

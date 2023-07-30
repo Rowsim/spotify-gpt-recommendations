@@ -11,7 +11,7 @@ const Home = () => {
 
     useEffect(() => {
         setHasSpotifyToken(getWithExpiry("spotifyToken") != null)
-    }, []);
+    }, [setHasSpotifyToken]);
 
     return (
         <div className="bg-indigo-50 font-montserrat h-full w-full overflow-y-auto overflow-x-hidden">

@@ -21,7 +21,7 @@ const Recommendations = () => {
         if (!userPlaylists) {
             (async () => setUserPlaylists((await getUserSpotifyPlaylists()).items))()
         }
-    }, [])
+    }, [setUserPlaylists, userPlaylists])
 
     const handleGetRecommendationsClick = async (term: UserTopTimeRange) => {
         setIsLoading(true);

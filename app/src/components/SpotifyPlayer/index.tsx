@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../AppContext";
 import { checkSpotifyTokenAndRefresh } from "../../services/spotify-auth";
 import { setActivePlayer } from "../../services/spotify-player";
@@ -66,7 +66,7 @@ const PlayerContainer = () => {
         return () => {
             document.body.removeChild(spotifyScript);
         };
-    }, []);
+    }, [playerWebSDKConnected, setSpotifyPlayerState]);
 
     if (playerWebSDKConnected) return <Player />;
     else return null;
