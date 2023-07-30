@@ -28,4 +28,4 @@ jobs:
     - name: Install NPM dependencies
       run: cd api && npm ci
     - name: Deploy API
-      run: sls deploy
+      run: cd api && sls deploy
