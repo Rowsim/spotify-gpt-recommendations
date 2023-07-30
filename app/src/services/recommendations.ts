@@ -3,7 +3,7 @@ import { Playlist, Track, UserTopTimeRange } from '../types/spotify';
 import { getArtistNames } from "../utils/spotify-utils";
 import { Configuration, OpenAIApi } from "openai";
 
-// TODO Move most of this logic server side after testing
+// Most of this logic has been moved to a lambda - just keeping this here for debugging
 
 const SPOTIFY_API_URL = "https://api.spotify.com/v1";
 

@@ -9,6 +9,7 @@ provider:
     cors:
       allowedOrigins:
         - http://localhost:3000
+        - https://d14m0uqec29uyj.cloudfront.net
     authorizers:
       spotifyAuthorizer:
         type: request
