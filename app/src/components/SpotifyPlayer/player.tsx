@@ -36,7 +36,7 @@ export const Player = () => {
     return (
         <div className="absolute left-0 top-4 w-full px-4 md:px-0">
             <div className="w-full flex flex-col justify-center items-center">
-                <button className="flex items-center mb-3 group" onClick={handleTogglePlay}>
+                <button className="flex items-center mb-4 group" onClick={handleTogglePlay}>
                     <p className="mr-2 text-base md:text-2xl font-semibold underline underline-offset-3 decoration-2 decoration-spotify-green group-hover:decoration-violet-300 group-active:decoration-violet-400">{spotifyPlayerState?.track_window?.current_track?.name}</p>
                     {spotifyPlayerState?.paused ?
                         <svg version="1.1" className="h-7 w-7 fill-spotify-green group-hover:fill-violet-300 group-active:fill-violet-400 group-focus:fill-violet-400" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -55,7 +55,7 @@ export const Player = () => {
                     }
                 </button>
                 <input
-                    className={`h-1 w-full md:w-72 bg-gray-300 rounded-lg appearance-none cursor-pointer range-sm accent-spotify-green [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-spotify-green [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:w-[10px] hover:[&::-webkit-slider-thumb]:bg-violet-300 active:[&::-webkit-slider-thumb]:bg-violet-300 disabled:cursor-default`}
+                    className={`h-1 w-full md:w-72 bg-gray-300 rounded-lg appearance-none cursor-pointer range-sm accent-spotify-green [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-spotify-green [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:h-[13px] [&::-webkit-slider-thumb]:w-[13px] hover:[&::-webkit-slider-thumb]:bg-violet-300 active:[&::-webkit-slider-thumb]:bg-violet-300 disabled:cursor-default`}
                     type="range"
                     min={0}
                     max={spotifyPlayerState?.duration}

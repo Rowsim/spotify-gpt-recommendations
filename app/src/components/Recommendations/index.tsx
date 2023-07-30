@@ -39,7 +39,7 @@ const Recommendations = () => {
     }
 
     return (
-        <div className="flex-row justify-center mt-24 max-h-[100vh] text-zinc-700">
+        <div className="flex-row justify-center mt-8 md:mt-24 max-h-[100vh] text-zinc-700">
             {
                 isLoading ? (
                     <div className="flex items-center">
@@ -104,7 +104,7 @@ const Recommendations = () => {
                             </div>
                         </div>
 
-                        <div className="sm:flex-row md:flex overflow-y-auto overflow-x-hidden max-h-[70vh] px-2">
+                        <div className="sm:flex-row md:flex overflow-y-auto overflow-x-hidden max-h-[68vh] px-2">
                             <div className="mb-8 md:mr-16">
                                 <div className="md:hidden mb-4 flex justify-center">
                                     <div className="flex items-center justify-center px-2 text-white bg-zinc-800 rounded">
@@ -112,7 +112,7 @@ const Recommendations = () => {
                                         <img className="w-6 h-6 ml-2 rounded-full" src={ChatGptLogo} alt='chat-gpt-logo' />
                                     </div>
                                 </div>
-                                {gptRecommendedTracks?.map((track) => <TrackCard key={track.id} track={track} />)}
+                                {gptRecommendedTracks?.map((track, i) => <TrackCard key={`${track.id}-${i}-gpt`} track={track} />)}
                             </div>
 
                             <div>
@@ -122,7 +122,7 @@ const Recommendations = () => {
                                         <img className="w-6 h-6 ml-2" src={SpotifyLogo} alt='spotify-logo' />
                                     </div>
                                 </div>
-                                {spotifyRecommendedTracks?.map((track) => <TrackCard key={track.id} track={track} reversed />)}
+                                {spotifyRecommendedTracks?.map((track, i) => <TrackCard key={`${track.id}-${i}-spotify`} track={track} reversed />)}
                             </div>
                         </div>
                     </section> :
