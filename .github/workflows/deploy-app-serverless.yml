@@ -1,0 +1,26 @@
+name: Deploy App
+on:
+  push:
+    branches:
+      - 'master'
+    paths: 
+      - 'app/**'
+jobs:
+  deploy-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'app/package-lock.json'
+    - name: Install Serverless Framework
+      run: npm install -g serverless
+    - name: Serverless AWS authentication
+      run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
+    - name: Install NPM dependencies
+      run: cd app && npm ci
+    - name: Deploy APP
+      run: cd app && npm run build && sls deploy

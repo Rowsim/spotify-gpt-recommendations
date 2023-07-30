@@ -1,0 +1,26 @@
+name: Deploy API
+on:
+  push:
+    branches:
+      - 'master'
+    paths: 
+      - 'api/**'
+jobs:
+  deploy-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'api/package-lock.json'
+    - name: Install Serverless Framework
+      run: npm install -g serverless
+    - name: Serverless AWS authentication
+      run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
+    - name: Install NPM dependencies
+      run: cd api && npm ci
+    - name: Deploy API
+      run: cd api && export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} && sls deploy
