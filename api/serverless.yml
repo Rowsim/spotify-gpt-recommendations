@@ -35,4 +35,3 @@ functions:
           path: /recommendations
           authorizer:
             name: spotifyAuthorizer
-# Test Api change
