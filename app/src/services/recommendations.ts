@@ -155,7 +155,6 @@ const topTracksToGptQuery = (tracks: Track[], limit = 10) => {
     return trackQuery;
 }
 
-// Around 200-250 tokens per request... about 5 requests per $0.002 - 50 req 0.02 - 500 req 0.2 - 5000 - $2
 const queryOpenAIChat = async (prompt: string) => {
     const completion = await openaiClient.createChatCompletion({
         model: "gpt-3.5-turbo",
