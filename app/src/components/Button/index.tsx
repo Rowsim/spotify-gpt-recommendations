@@ -25,17 +25,12 @@ export const Button = ({ text, customClass, solid, outlineDotted, iconRight, ico
                     [customClass ?? '']: customClass
                 })}
     >
-        {false ?
-            <svg className="h-5 w-5 fill-violet-400" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 12v-2l-4 3 4 3v-2h2.997A6.006 6.006 0 0 0 16 8h-2a4 4 0 0 1-3.996 4H7zM9 2H6.003A6.006 6.006 0 0 0 0 8h2a4 4 0 0 1 3.996-4H9v2l4-3-4-3v2z" fill-rule="evenodd" />
-            </svg> :
-            <p className={`font-bold text-sm md:text-md lg:text-lg ${textClass}`}>
-                {text}
-            </p>
-        }
+        <p className={`font-bold text-sm md:text-md lg:text-lg ${textClass}`}>
+            {text}
+        </p>
         {showRefresh ?
             <svg className="h-5 w-5 ml-2 fill-violet-400 group-hover:animate-spin group-focus:animate-spin group-active:animate-spin" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 12v-2l-4 3 4 3v-2h2.997A6.006 6.006 0 0 0 16 8h-2a4 4 0 0 1-3.996 4H7zM9 2H6.003A6.006 6.006 0 0 0 0 8h2a4 4 0 0 1 3.996-4H9v2l4-3-4-3v2z" fill-rule="evenodd" />
+                <path d="M7 12v-2l-4 3 4 3v-2h2.997A6.006 6.006 0 0 0 16 8h-2a4 4 0 0 1-3.996 4H7zM9 2H6.003A6.006 6.006 0 0 0 0 8h2a4 4 0 0 1 3.996-4H9v2l4-3-4-3v2z" />
             </svg>
             : null
         }
