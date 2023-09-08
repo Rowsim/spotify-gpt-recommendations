@@ -1,0 +1,42 @@
+service: spotify-gpt-recommendations-api-go
+provider:
+  name: aws
+  runtime: go1.x
+  profile: ${env:PROFILE, 'default'}
+  region: ${env:REGION, 'eu-west-2'}
+  stage: ${env:STAGE, 'dev'}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:3000
+        - https://d14m0uqec29uyj.cloudfront.net
+    authorizers:
+      spotifyAuthorizer:
+        type: request
+        enableSimpleResponses: true
+        identitySource: $request.header.Authorization
+        functionName: spotifyAuthorizer
+
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
+
+environment:
+  # TEST_AUTH_KEY: ${env:TEST_AUTH_KEY}
+  # OPENAI_API_KEY: ${env:OPENAI_API_KEY}
+
+functions:
+  spotifyAuthorizer:
+    handler: bin/functions/authorizer
+
+  getRecommendations:
+    handler: bin/functions/get-recommendations
+    timeout: 30
+    events:
+      - httpApi:
+          method: GET
+          path: /recommendations-go
+          authorizer:
+            name: spotifyAuthorizer
