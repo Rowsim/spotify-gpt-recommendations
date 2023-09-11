@@ -11,8 +11,15 @@ import (
 
 func Handler(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2CustomAuthorizerSimpleResponse, error) {
 	headerToken := request.Headers["authorization"]
-	hasSpotifyToken := checkSpotifyUser(headerToken)
-	if headerToken != os.Getenv("TEST_AUTH_KEY") || !hasSpotifyToken {
+
+	if headerToken == os.Getenv("DEV_DEBUG_AUTH_KEY") {
+		return events.APIGatewayV2CustomAuthorizerSimpleResponse{
+			IsAuthorized: true,
+		}, nil
+	}
+
+	hasValidSpotifyToken := checkSpotifyUser(headerToken)
+	if !hasValidSpotifyToken {
 		return events.APIGatewayV2CustomAuthorizerSimpleResponse{
 			IsAuthorized: false,
 		}, nil
