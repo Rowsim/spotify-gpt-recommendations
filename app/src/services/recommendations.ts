@@ -18,7 +18,8 @@ interface Recommendations {
 export const getRecommendationsFromLambda = async (term: UserTopTimeRange): Promise<Recommendations> => {
     const spotifyToken = await checkSpotifyTokenAndRefresh();
     if (!spotifyToken) return Promise.reject('Invalid spotify token')
-    return (await fetch(
+    //TODO Switch URL to env var
+        return (await fetch(
         `https://pubzxxtvt9.execute-api.eu-west-2.amazonaws.com/recommendations?timeRange=${term}`,
         {
             method: "GET",
