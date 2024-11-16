@@ -2,7 +2,8 @@ name: Deploy App
 on:
   push:
     branches:
-      - 'master'
+      - 'OFF'
+      # - 'master'
     paths: 
       - 'app/**'
 jobs:
