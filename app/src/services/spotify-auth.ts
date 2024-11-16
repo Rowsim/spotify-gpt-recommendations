@@ -3,7 +3,7 @@ import cryptoRandomString from 'crypto-random-string';
 const sha256 = require("crypto-js/sha256");
 const Base64 = require("crypto-js/enc-base64");
 
-const REDIRECT_URI = 'https://d14m0uqec29uyj.cloudfront.net/callback' || "http://localhost:3000/callback";
+const REDIRECT_URI = window.location.hostname === 'localhost' ? "http://localhost:3000/callback" : 'https://d14m0uqec29uyj.cloudfront.net/callback';
 const CLIENT_ID = "9b8a9591de894d3f9bba578e15aced7d";
 const REQUEST_SCOPES = "user-top-read streaming user-read-email user-read-private playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public";
 
