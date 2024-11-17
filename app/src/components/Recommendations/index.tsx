@@ -8,7 +8,7 @@ import SpotifyLogo from '../../assets/images/spotify.svg'
 import ChatGptLogo from '../../assets/images/chatgpt.png'
 import { AppContext } from "../../AppContext";
 
-const GET_RECOMMENDATIONS_SERVER_SIDE = true;
+const GET_RECOMMENDATIONS_SERVER_SIDE = false;
 
 const Recommendations = () => {
     const { userPlaylists, setUserPlaylists, setToastWithExpiry } = useContext(AppContext);

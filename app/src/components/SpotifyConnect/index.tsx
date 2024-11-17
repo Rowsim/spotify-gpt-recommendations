@@ -3,7 +3,7 @@ import SpotifyLogo from "../../assets/images/spotify.svg";
 import { Button } from "../Button";
 import { getSpotifyAuthRequestUri } from "../../services/spotify-auth";
 
-export const SpotifyConnect = () => {
+const SpotifyConnect = () => {
   const [authRequestUri, setRequestAuthUri] = useState("");
 
   useEffect(() => {
@@ -16,3 +16,5 @@ export const SpotifyConnect = () => {
     </a>
   )
 };
+
+export default SpotifyConnect
