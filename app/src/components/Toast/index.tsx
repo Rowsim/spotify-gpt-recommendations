@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { AppContext } from "../../AppContext"
 
-export const Toast = () => {
+const Toast = () => {
     const { toast } = useContext(AppContext);
 
     return (
@@ -24,3 +24,5 @@ export const Toast = () => {
         </>
     )
 }
+
+export default Toast

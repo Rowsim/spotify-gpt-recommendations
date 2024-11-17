@@ -35,6 +35,8 @@ export const getRecommendations = async (term: string): Promise<Recommendations>
     console.debug('topTracks', topTracks);
     const spotifyRecommendations = (await getSpotifyRecommendations(topTracks.items)).tracks;
     console.debug('spotifyRecommendations', spotifyRecommendations);
+    // TODO should split gpt and spotify get recommendations and call them in paralell
+    return { gptRecommendations: [], spotifyRecommendations } // Testing
 
     const gptQuery = topTracksToGptQuery(topTracks.items, 10);
     console.debug('gptQuery', gptQuery)
@@ -100,7 +102,7 @@ const getSpotifyRecommendations = async (tracks: Track[]): Promise<SpotifyRecomm
     const seedArtists = [...tracks.flatMap(track => track.artists).map(artist => artist.id)].slice(0, 3).join(',')
     const seedTracks = [...tracks.map(track => track.id)].slice(0, 2).join(',')
     const recommendationsResponse = await fetch(
-        `${SPOTIFY_API_URL}/recommendations?limit=10&market=GB&seed_artists=${encodeURIComponent(seedArtists)}&seed_tracks=${encodeURIComponent(seedTracks)}`,
+        `${SPOTIFY_API_URL}/recommendations?limit=20&market=GB&seed_artists=${encodeURIComponent(seedArtists)}&seed_tracks=${encodeURIComponent(seedTracks)}`,
         {
             method: "GET",
             headers: {
